@@ -29,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private TbItemCatMapper itemCatMapper;
     @Autowired
     private TbItemDescMapper itemDescMapper;
+    @Autowired
+    private TbItemParamItemMapper itemParamItemMapper;
 
     @Override
     public TbItem getItemById(long itemId) {
@@ -97,7 +99,7 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     @Override
-    public TaotaoResult createItem(TbItem item, TbItemDesc itemDesc) {
+    public TaotaoResult createItem(TbItem item, TbItemDesc itemDesc, TbItemParamItem itemParamItem) {
         //生成商品id
         //使用时间+随机数策略生成
         long itemId = IDUtils.genItemId();
@@ -113,6 +115,11 @@ public class ItemServiceImpl implements ItemService {
         itemDesc.setCreated(date);
         itemDesc.setUpdated(date);
         itemDescMapper.insert(itemDesc);
+        //添加规格参数
+        itemParamItem.setItemId(itemId);
+        itemParamItem.setCreated(date);
+        itemParamItem.setUpdated(date);
+        itemParamItemMapper.insert(itemParamItem);
         return TaotaoResult.ok();
 
     }

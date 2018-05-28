@@ -5,6 +5,7 @@ import com.taotao.common.pojo.TreeNode;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemParamItem;
 
 import java.util.List;
 
@@ -17,6 +18,6 @@ public interface ItemService {
     EUDataGridResult getItemList(int page,int rows);
     //商品类目详情
     List<TreeNode> getItemCatList(long parentId);
-    TaotaoResult createItem(TbItem item, TbItemDesc itemDesc);
+    TaotaoResult createItem(TbItem item, TbItemDesc itemDesc,TbItemParamItem itemParamItem);
 
 }

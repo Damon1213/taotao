@@ -4,6 +4,7 @@ import com.taotao.common.pojo.EUDataGridResult;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemParamItem;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,12 +22,12 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @RequestMapping("/item/{itemId}")
+    /*@RequestMapping("/item/{itemId}")
     @ResponseBody
     public TbItem getitemById(@PathVariable Long itemId){
         TbItem tbItem = itemService.getItemById(itemId);
         return tbItem;
-    }
+    }*/
 
     @RequestMapping("/item/list")
     @ResponseBody
@@ -37,10 +38,12 @@ public class ItemController {
 
     @RequestMapping(value = "/item/save", method = RequestMethod.POST)
     @ResponseBody
-    public TaotaoResult createItem(TbItem item,String desc){
+    public TaotaoResult createItem(TbItem item,String desc,String itemParams){
         TbItemDesc itemDesc = new TbItemDesc();
         itemDesc.setItemDesc(desc);
-        TaotaoResult result = itemService.createItem(item,itemDesc);
+        TbItemParamItem itemParamItem = new TbItemParamItem();
+        itemParamItem.setParamData(itemParams);
+        TaotaoResult result = itemService.createItem(item,itemDesc,itemParamItem);
         return result;
     }
 }
