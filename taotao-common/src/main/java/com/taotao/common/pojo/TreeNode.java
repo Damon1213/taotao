@@ -15,6 +15,10 @@ public class TreeNode {
         this.state = state;
     }
 
+    public TreeNode(){
+
+    }
+
     public long getId() {
         return id;
     }
