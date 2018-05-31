@@ -1,4 +1,4 @@
-package com.taotao.service;
+package com.taotao.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -7,6 +7,7 @@ import com.taotao.common.utils.TaotaoResult;
 import com.taotao.mapper.TbContentMapper;
 import com.taotao.pojo.TbContent;
 import com.taotao.pojo.TbContentExample;
+import com.taotao.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,4 +48,5 @@ public class ContentServiceImpl implements ContentService {
 
         return TaotaoResult.ok();
     }
+
 }

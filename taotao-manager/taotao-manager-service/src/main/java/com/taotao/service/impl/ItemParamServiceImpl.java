@@ -1,9 +1,10 @@
-package com.taotao.service;
+package com.taotao.service.impl;
 
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.mapper.TbItemParamMapper;
 import com.taotao.pojo.TbItemParam;
 import com.taotao.pojo.TbItemParamExample;
+import com.taotao.service.ItemParamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

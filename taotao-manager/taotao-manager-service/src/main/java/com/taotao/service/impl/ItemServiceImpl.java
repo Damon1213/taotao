@@ -1,4 +1,4 @@
-package com.taotao.service;
+package com.taotao.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -7,6 +7,7 @@ import com.taotao.common.pojo.TreeNode;
 import com.taotao.common.utils.IDUtils;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.*;
+import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.taotao.mapper.*;
