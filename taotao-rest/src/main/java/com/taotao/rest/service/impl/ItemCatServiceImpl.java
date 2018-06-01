@@ -29,6 +29,7 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Value("${INDEX_ITEM_CAT_REDIS_KEY}")
     private String INDEX_ITEM_CAT_REDIS_KEY;
 
+
     @Override
     public CatResult getItemCatList() {
         CatResult catResult = new CatResult();
