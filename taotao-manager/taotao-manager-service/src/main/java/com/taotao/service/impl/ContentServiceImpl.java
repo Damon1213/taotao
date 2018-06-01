@@ -62,4 +62,41 @@ public class ContentServiceImpl implements ContentService {
         return TaotaoResult.ok();
     }
 
+    @Override
+    public TaotaoResult updateContent(TbContent content) {
+        //补全pojo内容
+        content.setUpdated(new Date());
+        contentMapper.updateByPrimaryKeySelective(content);
+
+        //添加缓存同步逻辑
+        try {
+            HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return TaotaoResult.ok();
+    }
+
+    @Override
+    public TaotaoResult deleteContents(List<Long> ids) {
+        TbContentExample example = new TbContentExample();
+        TbContentExample.Criteria criteria = example.createCriteria();
+        criteria.andIdIn(ids);
+        //查询出需要删除的content
+        List<TbContent> list = contentMapper.selectByExample(example);
+        //然后再删除
+        contentMapper.deleteByExample(example);
+
+
+        //添加缓存同步逻辑
+        try {
+            for (TbContent content: list) {
+                HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return TaotaoResult.ok();
+    }
 }

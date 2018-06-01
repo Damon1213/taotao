@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +35,21 @@ public class ContentController {
     @ResponseBody
     public TaotaoResult insertContent(TbContent content){
         TaotaoResult result = contentService.insertContent(content);
+        return result;
+    }
+
+    @RequestMapping("/edit")
+    @ResponseBody
+    public TaotaoResult updateContent(TbContent content){
+        TaotaoResult result = contentService.updateContent(content);
+        return result;
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public TaotaoResult deleteContents(Long[] ids){
+        List<Long> list = Arrays.asList(ids);
+        TaotaoResult result = contentService.deleteContents(list);
         return result;
     }
 

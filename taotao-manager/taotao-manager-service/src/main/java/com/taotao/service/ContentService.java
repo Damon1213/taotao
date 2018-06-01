@@ -12,4 +12,6 @@ import java.util.List;
 public interface ContentService {
     EUDataGridResult getContentList(int page,int rows);
     TaotaoResult insertContent(TbContent content);
+    TaotaoResult updateContent(TbContent content);
+    TaotaoResult deleteContents(List<Long> ids);
 }
