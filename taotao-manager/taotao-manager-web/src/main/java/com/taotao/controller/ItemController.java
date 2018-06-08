@@ -1,12 +1,15 @@
 package com.taotao.controller;
 
 import com.taotao.common.pojo.EUDataGridResult;
+import com.taotao.common.utils.HttpClientUtil;
+import com.taotao.common.utils.IDUtils;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemParamItem;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,11 +42,17 @@ public class ItemController {
     @RequestMapping(value = "/item/save", method = RequestMethod.POST)
     @ResponseBody
     public TaotaoResult createItem(TbItem item,String desc,String itemParams){
+        //生成商品id
+        //使用时间+随机数策略生成
+        long itemId = IDUtils.genItemId();
+        item.setId(itemId);
         TbItemDesc itemDesc = new TbItemDesc();
         itemDesc.setItemDesc(desc);
         TbItemParamItem itemParamItem = new TbItemParamItem();
         itemParamItem.setParamData(itemParams);
         TaotaoResult result = itemService.createItem(item,itemDesc,itemParamItem);
+        //插入solr索引库
+        itemService.insertSolr(itemId);
         return result;
     }
 }

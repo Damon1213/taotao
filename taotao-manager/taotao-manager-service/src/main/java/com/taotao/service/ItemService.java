@@ -19,5 +19,6 @@ public interface ItemService {
     //商品类目详情
     List<TreeNode> getItemCatList(long parentId);
     TaotaoResult createItem(TbItem item, TbItemDesc itemDesc,TbItemParamItem itemParamItem);
+    TaotaoResult insertSolr(long itemId);
 
 }

@@ -4,11 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.EUDataGridResult;
 import com.taotao.common.pojo.TreeNode;
+import com.taotao.common.utils.ExceptionUtil;
+import com.taotao.common.utils.HttpClientUtil;
 import com.taotao.common.utils.IDUtils;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.*;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.taotao.mapper.*;
 
@@ -32,6 +35,8 @@ public class ItemServiceImpl implements ItemService {
     private TbItemDescMapper itemDescMapper;
     @Autowired
     private TbItemParamItemMapper itemParamItemMapper;
+    @Value("${SOLR_BASE_URL}")
+    private String SOLR_BASE_URL;
 
     @Override
     public TbItem getItemById(long itemId) {
@@ -103,8 +108,8 @@ public class ItemServiceImpl implements ItemService {
     public TaotaoResult createItem(TbItem item, TbItemDesc itemDesc, TbItemParamItem itemParamItem) {
         //生成商品id
         //使用时间+随机数策略生成
-        long itemId = IDUtils.genItemId();
-        item.setId(itemId);
+//        long itemId = IDUtils.genItemId();
+//        item.setId(itemId);
         item.setStatus((byte) 1);
         Date date = new Date();
         item.setCreated(date);
@@ -112,16 +117,28 @@ public class ItemServiceImpl implements ItemService {
         //把数据插入到商品表
         itemMapper.insert(item);
         //把商品插入商品描述表
-        itemDesc.setItemId(itemId);
+        itemDesc.setItemId(item.getId());
         itemDesc.setCreated(date);
         itemDesc.setUpdated(date);
         itemDescMapper.insert(itemDesc);
         //添加规格参数
-        itemParamItem.setItemId(itemId);
+        itemParamItem.setItemId(item.getId());
         itemParamItem.setCreated(date);
         itemParamItem.setUpdated(date);
         itemParamItemMapper.insert(itemParamItem);
         return TaotaoResult.ok();
 
+    }
+
+    @Override
+    public TaotaoResult insertSolr(long itemId) {
+        //插入索引库
+        try {
+            HttpClientUtil.doPost(SOLR_BASE_URL + "/" + itemId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+        }
+        return TaotaoResult.ok();
     }
 }
