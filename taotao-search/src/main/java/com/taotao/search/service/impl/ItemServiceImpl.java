@@ -90,4 +90,16 @@ public class ItemServiceImpl implements ItemService {
         }
         return TaotaoResult.ok();
     }
+
+    @Override
+    public TaotaoResult deleteItem(long itemId) {
+        try {
+            solrServer.deleteById(String.valueOf(itemId));
+            solrServer.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return TaotaoResult.build(500,ExceptionUtil.getStackTrace(e));
+        }
+        return TaotaoResult.ok();
+    }
 }
