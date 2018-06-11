@@ -68,4 +68,12 @@ public class Item {
     public void setItem_des(String item_des) {
         this.item_des = item_des;
     }
+
+    public String[] getImages() {
+        if (image != null) {
+            String[] images = image.split(",");
+            return images;
+        }
+        return null;
+    }
 }
