@@ -20,14 +20,22 @@ public interface ItemService {
     List<TreeNode> getItemCatList(long parentId);
     TaotaoResult createItem(TbItem item, TbItemDesc itemDesc,TbItemParamItem itemParamItem);
     TaotaoResult insertSolr(long itemId);
-    //查询商品详情
-    TbItemDesc getItemDescById(long itemId);
     //删除商品
     TaotaoResult deleteItems(List<Long> list);
     //下架商品
     TaotaoResult instock(Long[] ids);
     //上架商品
     TaotaoResult reshelf(Long[] ids);
+    //单个商品详情
+    TbItemDesc getItemDesc(long itemId);
+    //商品规格
+    TbItemParamItem getItemParamItem(long itemId);
+    //修改商品
+    TaotaoResult updateItem(TbItem item);
+    //修改商品详情
+    TaotaoResult updateItemDesc(TbItemDesc itemDesc);
+    //修改商品规格参数
+    TaotaoResult updateItemParamItem(TbItemParamItem itemParamItem);
 
 
 }

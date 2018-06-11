@@ -112,4 +112,21 @@ public class TbItem {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
+    @Override
+    public String toString() {
+        return "TbItem{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", sellPoint='" + sellPoint + '\'' +
+                ", price=" + price +
+                ", num=" + num +
+                ", barcode='" + barcode + '\'' +
+                ", image='" + image + '\'' +
+                ", cid=" + cid +
+                ", status=" + status +
+                ", created=" + created +
+                ", updated=" + updated +
+                '}';
+    }
 }

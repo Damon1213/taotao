@@ -141,12 +141,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public TbItemDesc getItemDescById(long itemId) {
-        TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(itemId);
-        return itemDesc;
-    }
-
-    @Override
     public TaotaoResult deleteItems(List<Long> list) {
 //        //删除商品
 //        TbItemExample itemExample = new TbItemExample();
@@ -198,6 +192,8 @@ public class ItemServiceImpl implements ItemService {
             tbItem.setId(id);
             //商品状态，1-正常，2-下架，3-删除
             tbItem.setStatus((byte) 2);
+            //更新日期改变
+            tbItem.setUpdated(new Date());
             itemMapper.updateByPrimaryKeySelective(tbItem);
         }
         return TaotaoResult.ok();
@@ -210,8 +206,48 @@ public class ItemServiceImpl implements ItemService {
             tbItem.setId(id);
             //商品状态，1-正常，2-下架，3-删除
             tbItem.setStatus((byte) 1);
+            //更新日期改变
+            tbItem.setUpdated(new Date());
             itemMapper.updateByPrimaryKeySelective(tbItem);
         }
+        return TaotaoResult.ok();
+    }
+
+    @Override
+    public TbItemDesc getItemDesc(long itemId) {
+        TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(itemId);
+        return itemDesc;
+    }
+
+    @Override
+    public TbItemParamItem getItemParamItem(long itemId) {
+        TbItemParamItemExample example = new TbItemParamItemExample();
+        example.createCriteria().andItemIdEqualTo(itemId);
+        List<TbItemParamItem> list = itemParamItemMapper.selectByExampleWithBLOBs(example);
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public TaotaoResult updateItem(TbItem item) {
+        item.setUpdated(new Date());
+        itemMapper.updateByPrimaryKeySelective(item);
+        return TaotaoResult.ok();
+    }
+
+    @Override
+    public TaotaoResult updateItemDesc(TbItemDesc itemDesc) {
+        itemDesc.setUpdated(new Date());
+        itemDescMapper.updateByPrimaryKey(itemDesc);
+        return TaotaoResult.ok();
+    }
+
+    @Override
+    public TaotaoResult updateItemParamItem(TbItemParamItem itemParamItem) {
+        itemParamItem.setUpdated(new Date());
+        itemParamItemMapper.updateByPrimaryKey(itemParamItem);
         return TaotaoResult.ok();
     }
 }
