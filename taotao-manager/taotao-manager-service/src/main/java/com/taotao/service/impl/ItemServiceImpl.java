@@ -4,11 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.EUDataGridResult;
 import com.taotao.common.pojo.TreeNode;
-import com.taotao.common.utils.ExceptionUtil;
-import com.taotao.common.utils.HttpClientUtil;
-import com.taotao.common.utils.IDUtils;
-import com.taotao.common.utils.TaotaoResult;
+import com.taotao.common.utils.*;
+import com.taotao.dao.JedisClient;
 import com.taotao.pojo.*;
+
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +32,14 @@ public class ItemServiceImpl implements ItemService {
     private TbItemDescMapper itemDescMapper;
     @Autowired
     private TbItemParamItemMapper itemParamItemMapper;
+    @Autowired
+    private JedisClient jedisClient;
     @Value("${SOLR_BASE_URL}")
     private String SOLR_BASE_URL;
+    @Value("${REDIS_ITEM_KEY}")
+    private String REDIS_ITEM_KEY;
+    @Value("${REDIS_ITEM_EXPIRE}")
+    private Integer REDIS_ITEM_EXPIRE;
 
     @Override
     public TbItem getItemById(long itemId) {
@@ -180,6 +185,15 @@ public class ItemServiceImpl implements ItemService {
                 e.printStackTrace();
                 return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
             }
+
+            try {
+                //删除redis缓存
+                jedisClient.del(REDIS_ITEM_KEY + ":" + itemId + ":base");
+                jedisClient.del(REDIS_ITEM_KEY + ":" + itemId + ":desc");
+                jedisClient.del(REDIS_ITEM_KEY + ":" + itemId + ":param");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return TaotaoResult.ok();
@@ -234,20 +248,50 @@ public class ItemServiceImpl implements ItemService {
     public TaotaoResult updateItem(TbItem item) {
         item.setUpdated(new Date());
         itemMapper.updateByPrimaryKeySelective(item);
+        try {
+            //更新redis缓存,先删除原来的
+            jedisClient.del(REDIS_ITEM_KEY + ":" + item.getId() + ":base");
+            //把商品信息写入缓存
+            jedisClient.set(REDIS_ITEM_KEY + ":" + item.getId() + ":base", JsonUtils.objectToJson(item));
+            //设置key的有效期
+            jedisClient.expire(REDIS_ITEM_KEY + ":" + item.getId() + ":base", REDIS_ITEM_EXPIRE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return TaotaoResult.ok();
     }
 
     @Override
     public TaotaoResult updateItemDesc(TbItemDesc itemDesc) {
         itemDesc.setUpdated(new Date());
-        itemDescMapper.updateByPrimaryKey(itemDesc);
+        itemDescMapper.updateByPrimaryKeySelective(itemDesc);
+        try {
+            //更新redis缓存,先删除原来的
+            jedisClient.del(REDIS_ITEM_KEY + ":" + itemDesc.getItemId() + ":desc");
+            //把商品信息写入缓存
+            jedisClient.set(REDIS_ITEM_KEY + ":" + itemDesc.getItemId() + ":desc", JsonUtils.objectToJson(itemDesc));
+            //设置key的有效期
+            jedisClient.expire(REDIS_ITEM_KEY + ":" + itemDesc.getItemId() + ":desc", REDIS_ITEM_EXPIRE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return TaotaoResult.ok();
     }
 
     @Override
     public TaotaoResult updateItemParamItem(TbItemParamItem itemParamItem) {
         itemParamItem.setUpdated(new Date());
-        itemParamItemMapper.updateByPrimaryKey(itemParamItem);
+        itemParamItemMapper.updateByPrimaryKeySelective(itemParamItem);
+        try {
+            //更新redis缓存,先删除原来的
+            jedisClient.del(REDIS_ITEM_KEY + ":" + itemParamItem.getItemId() + ":param");
+            //把商品信息写入缓存
+            jedisClient.set(REDIS_ITEM_KEY + ":" + itemParamItem.getItemId() + ":param", JsonUtils.objectToJson(itemParamItem));
+            //设置key的有效期
+            jedisClient.expire(REDIS_ITEM_KEY + ":" + itemParamItem.getItemId() + ":param", REDIS_ITEM_EXPIRE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return TaotaoResult.ok();
     }
 }
