@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by hu on 2018-06-12.
  */
@@ -72,10 +75,10 @@ public class UserController {
 
     @RequestMapping(value = "/login" , method = RequestMethod.POST)
     @ResponseBody
-    public TaotaoResult login(String username, String password) {
+    public TaotaoResult login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         TaotaoResult result = null;
         try {
-            result = userService.login(username, password);
+            result = userService.login(username, password, request, response);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,10 +108,10 @@ public class UserController {
 
     @RequestMapping("/logout/{token}")
     @ResponseBody
-    public Object logout(@PathVariable String token, String callback) {
+    public Object logout(@PathVariable String token, String callback, HttpServletRequest request, HttpServletResponse response) {
         TaotaoResult result = null;
         try {
-            result = userService.logout(token);
+            result = userService.logout(token, request ,response);
         } catch (Exception e) {
             e.printStackTrace();
             result = TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
@@ -121,6 +124,14 @@ public class UserController {
             mappingJacksonValue.setJsonpFunction(callback);
             return mappingJacksonValue;
         }
+    }
+
+    @RequestMapping("/showLogout/{token}")
+    public String showLogout(@PathVariable String token, String callback, HttpServletRequest request, HttpServletResponse response) {
+        userService.logout(token, request ,response);
+        String url = "/page/showLogin";
+        System.out.println(url);
+        return "redirect:" + url;
     }
 
 }
