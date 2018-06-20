@@ -2,8 +2,7 @@ package com.taotao.portal.interceptor;
 
 import com.taotao.common.utils.CookieUtils;
 import com.taotao.pojo.TbUser;
-import com.taotao.portal.service.UserService;
-import com.taotao.portal.service.UserServiceImpl;
+import com.taotao.portal.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

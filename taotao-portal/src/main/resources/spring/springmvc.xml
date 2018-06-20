@@ -17,7 +17,8 @@
     <!--拦截器配置-->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/item/**"/>
+            <!--加入购物车用户需要登录-->
+            <mvc:mapping path="/cart/add/**"/>
             <bean class="com.taotao.portal.interceptor.LoginInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

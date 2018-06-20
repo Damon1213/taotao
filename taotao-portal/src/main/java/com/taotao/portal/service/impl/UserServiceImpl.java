@@ -1,8 +1,9 @@
-package com.taotao.portal.service;
+package com.taotao.portal.service.impl;
 
 import com.taotao.common.utils.HttpClientUtil;
 import com.taotao.common.utils.TaotaoResult;
 import com.taotao.pojo.TbUser;
+import com.taotao.portal.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
