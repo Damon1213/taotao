@@ -37,9 +37,9 @@
 			<input type="hidden" name="orderItems[${status.index}].price" value="${cart.price}"/>
 			<input type="hidden" name="orderItems[${status.index}].totalFee" value="${cart.price * cart.num}"/>
 			<input type="hidden" name="orderItems[${status.index}].title" value="${cart.title}"/>
-			<input type="hidden" name="orderItems[${status.index}].picPath" value="${cart.images[0]}"/>
+			<input type="hidden" name="orderItems[${status.index}].picPath" value="${cart.image}"/>
 		</c:forEach>
-		<input type="hidden" name="payment" value="<fmt:formatNumber groupingUsed="false" maxFractionDigits="2" minFractionDigits="2" value="${totalPrice/100 }"/>"/>
+		<input type="hidden" name="payment" value="<fmt:formatNumber groupingUsed="false" maxFractionDigits="2" minFractionDigits="2" value="${totalPrice/1000 }"/>"/>
 		<input type="hidden" name="orderShipping.receiverName" value="入云龙"/>
 		<input type="hidden" name="orderShipping.receiverMobile" value="15891588888"/>
 		<input type="hidden" name="orderShipping.receiverState" value="北京"/>
@@ -188,7 +188,7 @@
 
 			<div class="p-img">
 				<a target="_blank" href="/item/${cart.id}.html">
-					<img src="${cart.images[0]}" alt="">
+					<img src="${cart.image}" alt="">
 				</a>
 			</div>
 			<div class="goods-msg">
@@ -201,7 +201,7 @@
 					<!--增加预售金额显示 begin   预售分阶段支付类型（1：一阶梯全款支付；2：一阶梯定金支付(全款或定金可选)；3：三阶梯仅定金支付） -->
 					<strong>￥<fmt:formatNumber
 							groupingUsed="false" maxFractionDigits="2"
-							minFractionDigits="2" value="${cart.price / 100 }" /></strong>
+							minFractionDigits="2" value="${cart.price / 1000 }" /></strong>
 					<!--增加预售金额显示 end-->
 					<span class="ml20"> x${cart.num} </span> 
 					<span class="ml20 p-inventory" skuId="11555193">有货</span>
@@ -262,7 +262,7 @@
 					<span>
 						总商品金额：
 					</span> 
-					<em class="price" id="warePriceId">¥<fmt:formatNumber value="${totalPrice / 100}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></em>
+					<em class="price" id="warePriceId">¥<fmt:formatNumber value="${totalPrice / 1000}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></em>
 				</div>
 				<div class="list">
 					<span>运费：</span> <em class="price" id="freightPriceId">
@@ -270,7 +270,7 @@
 				</div>
 				<div class="list">
 					<span>应付总额：</span> <em class="price" id="sumPayPriceId">
-						￥<fmt:formatNumber value="${totalPrice / 100}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></em>
+						￥<fmt:formatNumber value="${totalPrice / 1000}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></em>
 				</div>
 			</div>
 			<div class="clr"></div>
@@ -291,7 +291,7 @@
           		  id="order-submit"	onclick="$('#orderForm').submit()">
           	提交订单
           </button>
-                    <span class="total">应付总额：<strong id="payPriceId">￥<fmt:formatNumber value="${totalPrice / 100}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></strong>
+                    <span class="total">应付总额：<strong id="payPriceId">￥<fmt:formatNumber value="${totalPrice / 1000}" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true"/></strong>
           </span>
                     <span id="checkCodeDiv"></span>
           <div class="checkout-submit-tip" id="changeAreaAndPrice" style="display: none;">
