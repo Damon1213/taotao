@@ -18,7 +18,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <!--加入购物车用户需要登录-->
-            <mvc:mapping path="/cart/add/**"/>
+            <mvc:mapping path="/order/**"/>
             <bean class="com.taotao.portal.interceptor.LoginInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
